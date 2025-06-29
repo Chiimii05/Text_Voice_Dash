@@ -4,9 +4,17 @@
 
 import time
 import asyncio
+import subprocess
+import sys
 from pathlib import Path
-import edge_tts
 import streamlit as st
+
+# Asegurar que edge-tts esté instalado
+try:
+    import edge_tts
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "edge-tts"])
+    import edge_tts
 
 # Voces agrupadas
 groups = {
@@ -33,23 +41,24 @@ groups = {
     },
 }
 
-# Flatten options with group labels
+# Aplanar opciones con etiqueta de grupo
 voice_options = []
 for group, voices in groups.items():
     for key, label in voices.items():
         voice_options.append((f"{group} — {label}", key))
 
-# Default values
+# Valores por defecto
 default_text = "Hola, esto es una prueba de síntesis de voz."
 default_voice = "es-ES-ElviraNeural"
 
-# Streamlit UI
+# Configuración de página
 st.set_page_config(page_title="TTS Multilingüe", layout="centered")
 st.title("🎙️ Síntesis de Voz Multilingüe")
 
+# Área de texto
 text = st.text_area("Introduce tu texto…", value=default_text, height=150)
 
-# Select voice
+# Selector de voz
 def format_option(option):
     return option[0]
 
@@ -57,19 +66,17 @@ voice_choice = st.selectbox(
     "Elige una voz:",
     options=voice_options,
     format_func=format_option,
-    index=[v for v, k in voice_options].index(next(label for label, key in voice_options if key == default_voice))
+    index=[label for label, key in voice_options].index(next(label for label, key in voice_options if key == default_voice))
 )[1]
 
-if st.button("Generar audio"):
-    # Generar y guardar MP3
-    tmp_path = Path("tts_temp.mp3")
-    with st.spinner("Generando audio…"):
-        asyncio.run(edge_tts.Communicate(text=text, voice=voice_choice).save(tmp_path))
-    ts = int(time.time())
-    # Mostrar reproductor de audio y enlace de descarga
-    audio_bytes = tmp_path.read_bytes()
-    st.audio(audio_bytes, format="audio/mp3")
-    st.success("✅ Audio listo")
-    st.markdown(f"[⬇️ Descargar MP3](tts_temp.mp3?t={ts})")
+# Botón de generación\if st.button("Generar audio"):
+tmp_path = Path("tts_temp.mp3")
+with st.spinner("Generando audio…"):
+    asyncio.run(edge_tts.Communicate(text=text, voice=voice_choice).save(tmp_path))
+ts = int(time.time())
+audio_bytes = tmp_path.read_bytes()
+st.audio(audio_bytes, format="audio/mp3")
+st.success("✅ Audio listo")
+st.markdown(f"[⬇️ Descargar MP3](tts_temp.mp3?t={ts})")
 
-# Nota: Para despliegue en Streamlit Cloud o similar, asegúrate de manejar archivos temporales según la plataforma.
+# Nota: En despliegues gestionados, revisa el manejo de archivos temporales según la plataforma.
