@@ -55,15 +55,16 @@ voice_choice = voice_keys[voice_labels.index(choice)]
 
 # Generar audio al pulsar
 if st.button("Generar audio"):
-    # Importar edge-tts y validar instalación
+    # Intentar importar edge-tts
     try:
         import edge_tts
     except ImportError:
         st.error(
-            "⚠️ El paquete 'edge-tts' no está instalado en tu entorno de ejecución."
-            "Por favor, detén la aplicación e instala dependencias antes de reiniciar:"
-"````pip install edge-tts```"
-        )
+            '''⚠️ El paquete 'edge-tts' no está instalado en tu entorno de ejecución.
+Por favor, instala las dependencias antes de reiniciar la app ejecutando:
+
+    pip install edge-tts
+'''        )
         st.stop()
 
     # Generar y guardar MP3 temporal
@@ -87,5 +88,3 @@ if st.button("Generar audio"):
     )
 
 # Nota: En plataformas gestionadas, maneja archivos temporales según la plataforma.
-# En plataformas gestionadas, maneja archivos temporales según la plataforma.
-# En plataformas gestionadas, maneja archivos temporales según la plataforma.
