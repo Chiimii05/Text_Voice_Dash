@@ -4,17 +4,15 @@
 
 import time
 import asyncio
-import subprocess
-import sys
 from pathlib import Path
 import streamlit as st
 
-# Asegurar que edge-tts esté instalado
+# Intentar importar edge-tts y mostrar mensaje si no está instalado
 try:
     import edge_tts
 except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "edge-tts"])
-    import edge_tts
+    st.error("El paquete 'edge-tts' no está instalado. Por favor, ejecuta 'pip install edge-tts' en tu entorno.")
+    st.stop()
 
 # Voces agrupadas
 groups = {
@@ -42,10 +40,7 @@ groups = {
 }
 
 # Aplanar opciones con etiqueta de grupo
-voice_options = []
-for group, voices in groups.items():
-    for key, label in voices.items():
-        voice_options.append((f"{group} — {label}", key))
+voice_options = [(f"{grp} — {lbl}", key) for grp, vs in groups.items() for key, lbl in vs.items()]
 
 # Valores por defecto
 default_text = "Hola, esto es una prueba de síntesis de voz."
@@ -59,24 +54,23 @@ st.title("🎙️ Síntesis de Voz Multilingüe")
 text = st.text_area("Introduce tu texto…", value=default_text, height=150)
 
 # Selector de voz
-def format_option(option):
-    return option[0]
+voice_labels = [lbl for lbl, _ in voice_options]
+voice_keys = [key for _, key in voice_options]
+def format_option(label, idx): return label
 
-voice_choice = st.selectbox(
-    "Elige una voz:",
-    options=voice_options,
-    format_func=format_option,
-    index=[label for label, key in voice_options].index(next(label for label, key in voice_options if key == default_voice))
-)[1]
+selected_idx = voice_keys.index(default_voice) if default_voice in voice_keys else 0
+choice = st.selectbox("Elige una voz:", options=voice_labels, index=selected_idx)
+voice_choice = voice_keys[voice_labels.index(choice)]
 
-# Botón de generación\if st.button("Generar audio"):
-tmp_path = Path("tts_temp.mp3")
-with st.spinner("Generando audio…"):
-    asyncio.run(edge_tts.Communicate(text=text, voice=voice_choice).save(tmp_path))
-ts = int(time.time())
-audio_bytes = tmp_path.read_bytes()
-st.audio(audio_bytes, format="audio/mp3")
-st.success("✅ Audio listo")
-st.markdown(f"[⬇️ Descargar MP3](tts_temp.mp3?t={ts})")
+# Generar audio al pulsar
+if st.button("Generar audio"):
+    tmp_path = Path("tts_temp.mp3")
+    with st.spinner("Generando audio…"):
+        asyncio.run(edge_tts.Communicate(text=text, voice=voice_choice).save(tmp_path))
+    audio_bytes = tmp_path.read_bytes()
+    st.audio(audio_bytes, format="audio/mp3")
+    st.success("✅ Audio listo")
+    ts = int(time.time())
+    st.markdown(f"[⬇️ Descargar MP3](tts_temp.mp3?t={ts})")
 
-# Nota: En despliegues gestionados, revisa el manejo de archivos temporales según la plataforma.
+# Nota: En plataformas gestionadas, maneja los archivos temporales según la plataforma.
