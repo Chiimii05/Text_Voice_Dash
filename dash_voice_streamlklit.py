@@ -5,7 +5,9 @@
 import time
 import asyncio
 from pathlib import Path
+import base64
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Voces agrupadas
 groups = {
@@ -74,17 +76,17 @@ Por favor, instala las dependencias antes de reiniciar la app ejecutando:
             edge_tts.Communicate(text=text, voice=voice_choice).save(tmp_path)
         )
 
-    # Leer bytes y mostrar reproductor
+    # Leer bytes
     audio_bytes = tmp_path.read_bytes()
+
+    # Mostrar reproductor
     st.audio(audio_bytes, format="audio/mp3")
     st.success("✅ Audio listo")
 
-    # Botón de descarga integrado
-    st.download_button(
-        label="⬇️ Descargar MP3",
-        data=audio_bytes,
-        file_name="tts.mp3",
-        mime="audio/mpeg"
-    )
+    # Auto-descarga usando un link oculto y JS
+    b64 = base64.b64encode(audio_bytes).decode()
+    dl_html = f"<a id='dl' href='data:audio/mp3;base64,{b64}' download='tts.mp3'></a>"
+    dl_html += "<script>document.getElementById('dl').click();</script>"
+    components.html(dl_html)
 
 # Nota: En plataformas gestionadas, maneja archivos temporales según la plataforma.
