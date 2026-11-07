@@ -52,12 +52,14 @@ import edge_tts
 GROUPS = {
     "Español": {
         "es-ES-ElviraNeural": "🎙️ Elvira (es-ES fem.)",
-        "es-ES-AlbaNeural": "🎙️ Alba (es-ES fem.)",
+        "es-ES-XimenaNeural": "🎙️ Ximena (es-ES fem.)",
         "es-ES-AlvaroNeural": "🎙️ Álvaro (es-ES masc.)",
     },
     "Inglés (US)": {
         "en-US-JennyNeural": "🎙️ Jenny (en-US fem.)",
-        "en-US-BrandonNeural": "🎙️ Brandon (en-US masc.)",
+        "en-US-ChristopherNeural": "🎙️ Christopher (en-US masc., narración)",
+        "en-US-AndrewNeural": "🎙️ Andrew (en-US masc.)",
+        "en-US-AriaNeural": "🎙️ Aria (en-US fem., narración)",
     },
     "Inglés (UK)": {
         "en-GB-LibbyNeural": "🎙️ Libby (en-GB fem.)",
@@ -151,4 +153,4 @@ def download_mp3():
 
 # Ejecutar servidor
 if __name__ == "__main__":
-    app.run_server(debug=False, host="0.0.0.0", port=8050)
+    app.run(debug=False, host="127.0.0.1", port=8050)  # solo este PC; run_server ya no existe desde Dash 3

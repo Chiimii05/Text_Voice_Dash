@@ -1,0 +1,4 @@
+edge-tts>=7.0
+dash>=2.16
+dash-bootstrap-components>=1.3.0
+packaging

@@ -1,0 +1,14 @@
+{
+  "_nota": "Voces de edge-tts para el canal. Elegir oyendo las muestras (python voz_escenas.py --muestra \"...\" --voz <id>). Lista completa: --ver-voces en.",
+  "voz_elegida": "en_1",
+  "velocidad": "+0%",
+  "tono": "+0Hz",
+  "voces": {
+    "en_1": {"id": "en-US-ChristopherNeural", "nota": "masculina, noticias y narración; «Reliable, Authority»"},
+    "en_2": {"id": "en-US-AndrewNeural", "nota": "masculina, cálida y natural"},
+    "en_3": {"id": "en-GB-RyanNeural", "nota": "masculina, inglés británico"},
+    "en_4": {"id": "en-US-AriaNeural", "nota": "femenina, noticias y narración"},
+    "es_1": {"id": "es-ES-AlvaroNeural", "nota": "masculina, España"},
+    "es_2": {"id": "es-ES-ElviraNeural", "nota": "femenina, España"}
+  }
+}

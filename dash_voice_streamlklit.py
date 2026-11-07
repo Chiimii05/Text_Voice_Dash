@@ -13,12 +13,13 @@ import streamlit.components.v1 as components
 groups = {
     "Español": {
         "es-ES-ElviraNeural": "Elvira (es-ES fem.)",
-        "es-ES-AlbaNeural": "Alba (es-ES fem.)",
+        "es-ES-XimenaNeural": "Ximena (es-ES fem.)",
         "es-ES-AlvaroNeural": "Álvaro (es-ES masc.)",
     },
     "Inglés (US)": {
         "en-US-JennyNeural": "Jenny (en-US fem.)",
-        "en-US-BrandonNeural": "Brandon (en-US masc.)",
+        "en-US-ChristopherNeural": "Christopher (en-US masc., narración)",
+        "en-US-AndrewNeural": "Andrew (en-US masc.)",
     },
     "Inglés (UK)": {
         "en-GB-LibbyNeural": "Libby (en-GB fem.)",
